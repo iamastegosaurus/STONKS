@@ -14,7 +14,7 @@ def create_template(path, ticker):
         dates = [f.split('_')[0] for f in filenames]
         types = [f.split('_')[1] for f in filenames]
 
-        a = [ [dates[i], types[i], '', '', '', '', '', '', '', '', '', ''] for i in range(len(dates))]
+        a = [ [dates[i], types[i], '', '', '', '', '', '', '', '', ''] for i in range(len(dates))]
         
         df = pd.DataFrame(a, columns=[
             'date', 
@@ -26,7 +26,6 @@ def create_template(path, ticker):
             'current_assets', 
             'total_assets', 
             'current_liabilities', 
-            'longterm_debt', 
             'total_liabilities', 
             'shareholder_equity'
             ])

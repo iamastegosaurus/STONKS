@@ -7,7 +7,7 @@ from create_template import create_template
 
 path = 'Q://STONKS//downloads//'
 
-period = 1 # years
+period = 6 # years
 
 end = datetime.now().date()
 start = datetime(end.year - 5, end.month, end.day).date()
@@ -20,7 +20,7 @@ for t in tickers:
     # download_prices(t, path, start, end)
 
 
-# download_financials(tickers, path, start, end)
+download_financials(tickers, path, start, end)
 
 for t in tickers:
     create_template(path, t)

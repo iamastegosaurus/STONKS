@@ -1,0 +1,12 @@
+filings downloads:
+2014 "Q1" through end of 2021
+need to start checking 2022
+
+
+
+prices downloads:
+start = datetime.datetime(2011, 1, 1)
+end = datetime.datetime(2021, 12, 31)
+
+issues on:
+['BRK.B', 'BF.B']

@@ -13,52 +13,63 @@ def get_req(url):
         a = requests.get(url, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0'})
     return a
 
-
 filings = []
 
-ticker = 'AMD'
+ticker = 'INTC'
 
 companies = {
-    'INTC': '50083',
-    'AMD': '2488'
+    'INTC': '50863',
+    'AMD': '02488'
 }
 
 cik = companies[ticker]
-
-for year in range(2018, 2019):
-    for qtr in range(1,2):#5):
-        earl = f'https://www.sec.gov/Archives/edgar/full-index/{year}/QTR{qtr}/master.idx'
-        download = str(get_req(earl).content)
-        download = download.split('\\n')
-        for item in download:
-            if '10-Q' in item or '10-K' in item: 
-                if cik in item: # go through list of ciks later
-                    filings.append(item)
+# for year in range(2018, 2019):
+#     for qtr in range(1,2):#5):
+year = 2019
+qtr = 2
+earl = f'https://www.sec.gov/Archives/edgar/full-index/{year}/QTR{qtr}/master.idx'
+download = str(get_req(earl).content)
+download = download.split('\\n')
+for item in download:
+    if '10-Q' in item or '10-K' in item: 
+        if cik in item: # go through list of ciks later
+            filings.append(item)
 
 base = 'https://www.sec.gov/Archives/'
 
 for f in filings:
     print(f)
+    # 832488|MAM SOFTWARE GROUP, INC.|10-Q|2018-02-08|edgar/data/832488/0001437749-18-002071.txt
     cik = f.split('|')[0]
     company = f.split('|')[1]
     filing_type = f.split('|')[2]
     filing_date = f.split('|')[3]
     url = f.split('|')[4]
 
-    req_url = base + url # https://www.sec.gov/Archives/edgar/data/50863/0000050863-20-000026.txt
+    req_url = base + url 
+    print(req_url)
     data = get_req(req_url).content
     data = data.decode("utf-8") 
     data = data.split('FILENAME>')
     data = data[1].split('\n')[0]
-    url_to_use = 'https://www.sec.gov/Archives/'+ url.replace('.txt', '') + '/' + data # https://www.sec.gov/Archives/edgar/data/50863/0000050863-16-000105/a10kdocument12262015q4.htm
-    url_to_use = url_to_use.replace('-', '')
+    url_to_use = 'https://www.sec.gov/Archives/'+ url.replace('.txt', '').replace('-', '') + '/' + data 
+    print(url_to_use)
+
+    # https://www.sec.gov/Archives/edgar/data/50863/0000050863-16-000105/a10kdocument12262015q4.htm
+    # https://www.sec.gov/ix?doc=/Archives/edgar/data/0000050863/000005086321000010/intc-20201226.htm
+    # https://www.sec.gov/Archives/edgar/data/2488/0000002488-18-000042/amd-12302017x10k.htm
 
     resp = get_req(req_url)
     soup = bs4.BeautifulSoup(resp.text, 'lxml')
 
     replace_chars = ',$—() '
 
-    key_text = ['Net revenue', 'Current assets:', 'Net cash provided by operating activities']
+    # FINAL VALUE KEY TEXT NEEDS REVISION
+    # key_text = ['Net revenue', 'Current assets:', 'Net cash provided by operating activities']
+
+    # regex to find 'cash flows' and operating activities
+
+    key_text = ['Net revenue', 'Current assets:', 'Cash flows from operating activities:']
     names = ['IncomeStatement', 'BalanceSheet', 'CashFlows']
     starting_indexes = [4, 3, 4]
 
@@ -110,6 +121,6 @@ for f in filings:
 
         df = pd.DataFrame(data, index=['Value']).T
 
-        fil = 'Q://STONKS//' + ticker + '//' + filing_date + '_' + filing_type + '_'
+        fil = 'Q://STONKS//auto_download//' + ticker + '//' + filing_date + '_' + filing_type + '_'
         df.to_excel(fil + names[s] + '.xlsx')
 

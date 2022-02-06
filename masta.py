@@ -12,7 +12,7 @@ period = 6 # years
 end = datetime.now().date()
 start = datetime(end.year - 5, end.month, end.day).date()
 
-tickers = ['AMD']
+tickers = ['COST']
 
 for t in tickers:
     if not os.path.exists(path + t):

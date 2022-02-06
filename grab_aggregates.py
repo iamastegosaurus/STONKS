@@ -9,7 +9,8 @@ def grab_aggregates(path):
         p = path + s + '/aggregate.xlsx'
         newpath = 'Q:/STONKS/aggregates/' + s + '.xlsx'
         if os.path.exists(p):
-            shutil.copyfile(p, newpath)
+            if not os.path.exists(newpath):
+                shutil.copyfile(p, newpath)
 
 
 grab_aggregates('Q:/STONKS/downloads/')

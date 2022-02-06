@@ -12,7 +12,13 @@ period = 6 # years
 end = datetime.now().date()
 start = datetime(end.year - 5, end.month, end.day).date()
 
+<<<<<<< HEAD
 tickers = ['COST']
+=======
+tickers = ['INTC', 'ADSK'] # desktop inprogress
+tickers = [''] # laptop inprogress
+
+>>>>>>> 8842982ed6492fd5200a93b05d45291bc1accd20
 
 for t in tickers:
     if not os.path.exists(path + t):

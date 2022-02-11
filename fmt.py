@@ -7,27 +7,10 @@ unitinfo = b[usd+6:]
 
 # print(unitinfo)
 
-longtext = {
-    'NA': 'Field not present', # probably unnecessary
-    'NAN': '',
-    'NONE': '',
 
-    'NR': 'Net revenue',
-    'COGS': 'Cost of goods sold',
-    'SGA': 'Selling, general, and administrative',
-    'RND': 'Research and development',
-
-    'NI': 'Net income',
-    'SHARES': 'Diluted common shares outstanding'
-
-}
 
 bslongtext = {
-    'CCE': 'Cash and cash equivalents',
-    'AR': 'Accounts receivable',
-    'IN': 'Inventories',
-    'TCA': 'Total current assets',
-    'TA': 'Total assets'
+
 }
 
 lookups = {
@@ -62,8 +45,6 @@ lookups = {
     'weightedaveragesharesdiluted': 'SHARES',
     'dilutedshares': 'SHARES',
     'diluted': 'SHARES',
-
-
 }
 
 bslookups = {
@@ -129,13 +110,14 @@ df = pd.read_excel('C:/Users/djg286/OneDrive - Corteva/Desktop/down/sample.xlsx'
 rowheaders = list(df[df.columns[0]])
 
 search = list(df[df.columns[1]])
-col = df.columns[1].lower()
+col_name = df.columns[1]
 for c in search:
     c = str(c)
     if '[' in c or ']' in c:
-        col = df.columns[2].lower()
+        col_name = df.columns[2]
         break
 
+col = col_name.lower()
 if '3' in col and 'month' in col:
     period_type = '3-month'
 elif '12' in col and 'month' in col:

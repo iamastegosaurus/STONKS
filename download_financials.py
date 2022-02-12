@@ -1,8 +1,6 @@
 import requests
 import pandas as pd
 from time import sleep
-from datetime import datetime
-import os
 
 def get_req(url):
     try:
@@ -12,7 +10,7 @@ def get_req(url):
         a = requests.get(url, headers={'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0'})
     return a
 
-def download_financials(tickers, path, start, end):
+def download_financials(tickers, path, startyear, endyear):
 
     stocklist = pd.read_excel('Q://STONKS//stocks.xlsx', sheet_name='stock', converters={'CIK': str})
     ciks = []
@@ -25,8 +23,7 @@ def download_financials(tickers, path, start, end):
 
     filings = []
 
-    # for year in range(start.year-1, end.year+1):
-    for year in range(start.year, end.year):
+    for year in range(startyear, endyear):
         for qtr in range(1,5):
             earl = f'https://www.sec.gov/Archives/edgar/full-index/{year}/QTR{qtr}/master.idx'
             download = str(get_req(earl).content)
@@ -53,6 +50,6 @@ def download_financials(tickers, path, start, end):
         url = base + cik + '/' + doc_num + '/Financial_Report.xlsx'
         a = get_req(url)
 
-        filename = 'Q://STONKS//downloads//' + ticker + '/' + filing_date + '_' + filing_type + '.xlsx'
+        filename = path + ticker + '/' + filing_date + '_' + filing_type + '.xlsx'
         with open(filename,'wb') as f:
             f.write(a.content)

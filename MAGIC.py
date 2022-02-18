@@ -1,10 +1,10 @@
 import pandas as pd
 import os 
 
-from parse_helpers.get_date import get_date
-from parse_helpers.get_sheet_names import get_sheet_names
-from parse_helpers.get_lookups import get_lookups
-from parse_helpers.get_longtext import get_longtext
+from helpers.get_date import get_date
+from helpers.get_sheet_names import get_sheet_names
+from helpers.get_lookups import get_lookups
+from helpers.get_longtext import get_longtext
 
 
 longtext, iscount = get_longtext()
@@ -13,7 +13,7 @@ path = 'Q:/STONKS/downloads/'
 
 # TODO: add eps to pull for when they don't put sharecount, just eps
 
-ticker = 'TXN'
+ticker = 'COST'
 overallnumbermod = 1000000
 
 path = path + ticker
@@ -51,12 +51,10 @@ for file in filings:
         elif 'unnamed' in c:
             pass
         elif 'month' in c:
-            pass
+            period_type = 'bad month'
         else:
             period_type = 'unknown'
-
         if period_type == '3-month' or period_type == '12-month':
-
             if str(df.loc[0, col]) != 'nan':
                 period_date = get_date(df.loc[0, col])
 
